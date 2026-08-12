@@ -125,11 +125,13 @@ export function EcomapCanvas({
       onPointerUp={handlePointerUp}
     >
       <defs>
-        <marker id="arrow-end" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+        {/* Same right-pointing triangle for both ends — auto-start-reverse flips it
+            180° automatically when used as marker-start, so it must not be pre-mirrored. */}
+        <marker id="arrow-end" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
           <path d="M0,0 L10,5 L0,10 z" fill="var(--text)" />
         </marker>
-        <marker id="arrow-start" viewBox="0 0 10 10" refX="2" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-          <path d="M10,0 L0,5 L10,10 z" fill="var(--text)" />
+        <marker id="arrow-start" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="var(--text)" />
         </marker>
       </defs>
 
