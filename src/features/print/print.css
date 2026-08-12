@@ -110,4 +110,17 @@
     border: none;
     height: 480px;
   }
+
+  /*
+   * Browsers strip background colors when printing/exporting to PDF by
+   * default (to save ink) unless told not to — this is what was hiding the
+   * legend swatches (they're background-color spans) and would eventually
+   * hit the canvas node fills/edge strokes too.
+   */
+  .print-page,
+  .print-page * {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+    color-adjust: exact;
+  }
 }
