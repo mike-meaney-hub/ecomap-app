@@ -4,7 +4,7 @@ import { updateNodePosition } from '../../../db/repositories/nodes';
 import { createEdge } from '../../../db/repositories/edges';
 import { useRelationshipColourMap } from '../../../hooks/useRelationshipColours';
 import { NodeShape } from './NodeShape';
-import { EdgeLine, trimLineToNodeEdges } from './EdgeLine';
+import { EdgeLine, trimLineToNodeEdges, arrowMarkerId } from './EdgeLine';
 import type { Point } from '../layout/radialLayout';
 import './canvas.css';
 
@@ -130,13 +130,15 @@ export function EcomapCanvas({
       <defs>
         {/* Same right-pointing triangle for both ends — auto-start-reverse flips it
             180° automatically when used as marker-start, so it must not be pre-mirrored.
-            One pair per relationship type so the arrowhead matches that type's colour. */}
+            Marker ids are scoped by colour (see arrowMarkerId) so a colour change in
+            Settings always mints a fresh marker element instead of mutating one in
+            place — SVG engines don't reliably repaint arrowheads otherwise. */}
         {RELATIONSHIP_TYPES.map((type) => (
           <Fragment key={type}>
-            <marker id={`arrow-end-${type}`} viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+            <marker id={arrowMarkerId('end', type, relationshipColours[type])} viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
               <path d="M0,0 L10,5 L0,10 z" fill={relationshipColours[type]} />
             </marker>
-            <marker id={`arrow-start-${type}`} viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <marker id={arrowMarkerId('start', type, relationshipColours[type])} viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
               <path d="M0,0 L10,5 L0,10 z" fill={relationshipColours[type]} />
             </marker>
           </Fragment>

@@ -8,6 +8,16 @@ const RELATIONSHIP_STYLE: Record<RelationshipType, { width: number; dash?: strin
   absent: { width: 1.5, dash: '2 5' },
 };
 
+/**
+ * Marker ids are scoped by colour, not just relationship type, so a colour
+ * change always mints a brand-new <marker> element instead of mutating an
+ * existing one — SVG engines are unreliable about repainting arrowheads
+ * whose marker definition was mutated in place.
+ */
+export function arrowMarkerId(end: 'start' | 'end', relationshipType: RelationshipType, colour: string) {
+  return `arrow-${end}-${relationshipType}-${colour.replace('#', '')}`;
+}
+
 export function trimLineToNodeEdges(from: Point, to: Point, fromRadius: number, toRadius: number) {
   const dx = to.x - from.x;
   const dy = to.y - from.y;
@@ -41,9 +51,13 @@ export function EdgeLine({
 }) {
   const style = RELATIONSHIP_STYLE[relationshipType];
   const markerStart =
-    direction === 'oneWayBToA' || direction === 'bidirectional' ? `url(#arrow-start-${relationshipType})` : undefined;
+    direction === 'oneWayBToA' || direction === 'bidirectional'
+      ? `url(#${arrowMarkerId('start', relationshipType, colour)})`
+      : undefined;
   const markerEnd =
-    direction === 'oneWayAToB' || direction === 'bidirectional' ? `url(#arrow-end-${relationshipType})` : undefined;
+    direction === 'oneWayAToB' || direction === 'bidirectional'
+      ? `url(#${arrowMarkerId('end', relationshipType, colour)})`
+      : undefined;
   const midX = (from.x + to.x) / 2;
   const midY = (from.y + to.y) / 2;
   const stroke = isSelected ? 'var(--accent)' : colour;
