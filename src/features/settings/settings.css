@@ -1,0 +1,68 @@
+.settings-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+  margin-top: 20px;
+}
+
+@media (max-width: 720px) {
+  .settings-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.lookup-editor h2 {
+  font-size: 16px;
+  margin-bottom: 12px;
+}
+
+.lookup-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.lookup-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.lookup-row-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.lookup-row-actions button[aria-label] {
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--text-h);
+  border-radius: 4px;
+  width: 26px;
+  height: 26px;
+}
+
+.lookup-row-actions button[aria-label]:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.lookup-add-form {
+  display: flex;
+  gap: 8px;
+}
+
+.colour-input {
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: none;
+  flex-shrink: 0;
+}
