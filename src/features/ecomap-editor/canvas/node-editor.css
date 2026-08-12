@@ -1,0 +1,73 @@
+.node-inline-editor {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 260px;
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+}
+
+.node-inline-editor-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-h);
+}
+
+.node-inline-editor-close {
+  border: none;
+  background: none;
+  font-size: 18px;
+  line-height: 1;
+  color: var(--text);
+  padding: 0 4px;
+}
+
+.node-inline-editor-notes {
+  resize: vertical;
+  font-family: inherit;
+}
+
+.swatch-picker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.swatch {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 2px solid var(--border);
+  cursor: pointer;
+  padding: 0;
+}
+
+.swatch-none {
+  background: var(--bg);
+  position: relative;
+}
+
+.swatch-none::after {
+  content: '';
+  position: absolute;
+  inset: 4px;
+  background: linear-gradient(to top right, transparent 46%, var(--text) 48%, var(--text) 52%, transparent 54%);
+}
+
+.swatch-selected {
+  border-color: var(--text-h);
+}
+
+.swatch:disabled {
+  opacity: 0.5;
+  cursor: default;
+}

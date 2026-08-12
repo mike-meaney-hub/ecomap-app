@@ -7,6 +7,9 @@ import { useFlags } from '../../hooks/useFlags';
 import { finaliseVersion } from '../../db/repositories/ecomapVersions';
 import { Button } from '../../components/ui/Button';
 import { EcomapCanvas } from './canvas/EcomapCanvas';
+import { NodeInlineEditor } from './canvas/NodeInlineEditor';
+import { QuickAddBar } from './toolbar/QuickAddBar';
+import './canvas/node-editor.css';
 import './editor.css';
 
 export function EcomapEditorPage() {
@@ -22,6 +25,7 @@ export function EcomapEditorPage() {
   }
 
   const isFinalised = version.status === 'finalised';
+  const selectedNode = nodes?.find((n) => n.id === selectedNodeId) ?? null;
 
   return (
     <div className="editor-page">
@@ -40,6 +44,14 @@ export function EcomapEditorPage() {
         </div>
       )}
 
+      <QuickAddBar
+        versionId={version.id}
+        categories={categories ?? []}
+        nodes={nodes ?? []}
+        isReadOnly={isFinalised}
+        onNodeAdded={setSelectedNodeId}
+      />
+
       <div className="editor-canvas-area">
         <EcomapCanvas
           nodes={nodes ?? []}
@@ -49,6 +61,15 @@ export function EcomapEditorPage() {
           selectedNodeId={selectedNodeId}
           onSelectNode={setSelectedNodeId}
         />
+        {selectedNode && (
+          <NodeInlineEditor
+            node={selectedNode}
+            categories={categories ?? []}
+            flags={flags ?? []}
+            isReadOnly={isFinalised}
+            onClose={() => setSelectedNodeId(null)}
+          />
+        )}
       </div>
     </div>
   );

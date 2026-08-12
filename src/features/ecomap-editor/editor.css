@@ -26,4 +26,5 @@
 .editor-canvas-area {
   flex: 1;
   min-height: 0;
+  position: relative;
 }
