@@ -28,3 +28,9 @@
   min-height: 0;
   position: relative;
 }
+
+.editor-hint {
+  margin: 8px 24px 0;
+  font-size: 12px;
+  color: var(--text);
+}

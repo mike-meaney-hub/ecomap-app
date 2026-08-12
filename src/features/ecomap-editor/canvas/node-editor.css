@@ -71,3 +71,29 @@
   opacity: 0.5;
   cursor: default;
 }
+
+.edge-type-options {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.edge-type-btn {
+  text-align: left;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--text-h);
+  border-radius: 6px;
+  padding: 6px 10px;
+  font-size: 13px;
+}
+
+.edge-type-btn-selected {
+  border-color: var(--accent);
+  background: var(--accent-bg);
+}
+
+.edge-type-btn:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
