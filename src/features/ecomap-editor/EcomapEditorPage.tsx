@@ -1,11 +1,11 @@
 import { useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useEcomapVersion } from '../../hooks/useEcomapVersions';
 import { useNodesForVersion } from '../../hooks/useNodesForVersion';
 import { useEdgesForVersion } from '../../hooks/useEdgesForVersion';
 import { useCategories } from '../../hooks/useCategories';
 import { useFlags } from '../../hooks/useFlags';
-import { finaliseVersion } from '../../db/repositories/ecomapVersions';
+import { finaliseVersion, duplicateVersionAsNewDraft } from '../../db/repositories/ecomapVersions';
 import { updateNodePosition } from '../../db/repositories/nodes';
 import { computeRadialLayout } from './layout/radialLayout';
 import { Button } from '../../components/ui/Button';
@@ -22,6 +22,7 @@ export type EditorMode = 'live' | 'desk';
 
 export function EcomapEditorPage() {
   const { clientId, versionId } = useParams();
+  const navigate = useNavigate();
   const version = useEcomapVersion(versionId);
   const nodes = useNodesForVersion(versionId);
   const edges = useEdgesForVersion(versionId);
@@ -63,7 +64,15 @@ export function EcomapEditorPage() {
 
       {isFinalised && (
         <div className="finalised-banner">
-          This version is finalised and read-only. Create a new version to make further changes.
+          <span>This version is finalised and read-only.</span>
+          <Button
+            onClick={async () => {
+              const newVersion = await duplicateVersionAsNewDraft(version.id);
+              navigate(`/clients/${clientId}/ecomaps/${newVersion.id}`);
+            }}
+          >
+            Create new version
+          </Button>
         </div>
       )}
 

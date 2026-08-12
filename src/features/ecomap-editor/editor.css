@@ -1,4 +1,8 @@
 .finalised-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
   background: var(--accent-bg);
   border: 1px solid var(--accent-border);
   color: var(--text-h);
