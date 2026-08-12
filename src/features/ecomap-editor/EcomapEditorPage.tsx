@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { useEcomapVersion } from '../../hooks/useEcomapVersions';
 import { useNodesForVersion } from '../../hooks/useNodesForVersion';
 import { useEdgesForVersion } from '../../hooks/useEdgesForVersion';
@@ -21,7 +21,7 @@ import './editor.css';
 export type EditorMode = 'live' | 'desk';
 
 export function EcomapEditorPage() {
-  const { versionId } = useParams();
+  const { clientId, versionId } = useParams();
   const version = useEcomapVersion(versionId);
   const nodes = useNodesForVersion(versionId);
   const edges = useEdgesForVersion(versionId);
@@ -49,11 +49,16 @@ export function EcomapEditorPage() {
     <div className="editor-page">
       <div className="editor-topbar">
         <h1>{version.versionLabel}</h1>
-        {!isFinalised && (
-          <Button variant="primary" onClick={() => finaliseVersion(version.id)}>
-            Finalise version
-          </Button>
-        )}
+        <div className="editor-topbar-actions">
+          <Link to={`/clients/${clientId}/ecomaps/${version.id}/print`}>
+            <Button>Print / Export</Button>
+          </Link>
+          {!isFinalised && (
+            <Button variant="primary" onClick={() => finaliseVersion(version.id)}>
+              Finalise version
+            </Button>
+          )}
+        </div>
       </div>
 
       {isFinalised && (

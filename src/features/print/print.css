@@ -1,0 +1,113 @@
+.print-page {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 24px;
+  color: var(--text-h);
+  background: var(--bg);
+}
+
+.print-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border);
+}
+
+.print-notes-toggle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+}
+
+.print-header {
+  border-bottom: 2px solid var(--text-h);
+  padding-bottom: 12px;
+  margin-bottom: 16px;
+}
+
+.print-header h1 {
+  font-size: 22px;
+}
+
+.print-header-meta {
+  margin: 4px 0 0;
+  color: var(--text);
+  font-size: 14px;
+}
+
+.print-canvas-frame {
+  height: 500px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.print-legend {
+  display: flex;
+  gap: 32px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.print-legend-group h2 {
+  font-size: 13px;
+  margin-bottom: 6px;
+}
+
+.print-legend-group ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  font-size: 13px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.print-legend-group li {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.print-legend-swatch {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+.print-notes {
+  border-top: 1px solid var(--border);
+  padding-top: 16px;
+}
+
+.print-notes h2 {
+  font-size: 13px;
+  margin-bottom: 6px;
+}
+
+.print-notes p {
+  white-space: pre-wrap;
+  font-size: 14px;
+}
+
+@media print {
+  .no-print {
+    display: none !important;
+  }
+
+  .print-page {
+    max-width: none;
+    padding: 0;
+  }
+
+  .print-canvas-frame {
+    border: none;
+    height: 480px;
+  }
+}

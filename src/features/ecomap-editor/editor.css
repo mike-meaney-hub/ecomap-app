@@ -23,6 +23,11 @@
   border-bottom: 1px solid var(--border);
 }
 
+.editor-topbar-actions {
+  display: flex;
+  gap: 8px;
+}
+
 .editor-toolbar {
   display: flex;
   align-items: center;

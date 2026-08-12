@@ -72,3 +72,9 @@ button, input, select, textarea {
 button {
   cursor: pointer;
 }
+
+@media print {
+  .no-print {
+    display: none !important;
+  }
+}
