@@ -1,10 +1,23 @@
 import { useState } from 'react';
-import type { EcomapVersion } from '../../../db/types';
+import type { EcomapVersion, EcomapNode, EcomapEdge, Category } from '../../../db/types';
 import { updateVersionSummary } from '../../../db/repositories/ecomapVersions';
 import { useAutosave } from '../../../autosave/useAutosave';
+import { StatsPanel } from '../stats/StatsPanel';
 import './panels.css';
 
-export function DeskModeSidePanel({ version, isReadOnly }: { version: EcomapVersion; isReadOnly: boolean }) {
+export function DeskModeSidePanel({
+  version,
+  isReadOnly,
+  nodes,
+  edges,
+  categories,
+}: {
+  version: EcomapVersion;
+  isReadOnly: boolean;
+  nodes: EcomapNode[];
+  edges: EcomapEdge[];
+  categories: Category[];
+}) {
   const [notes, setNotes] = useState(version.summaryNotes);
   const autosave = useAutosave(notes, (value) => updateVersionSummary(version.id, value), 800);
 
@@ -35,8 +48,13 @@ export function DeskModeSidePanel({ version, isReadOnly }: { version: EcomapVers
       </div>
 
       <div className="desk-side-panel-section desk-side-panel-placeholder">
-        <h3>Filters &amp; comparison</h3>
-        <p>Filters, comparison, and stats — coming in Phase 2.</p>
+        <h3>Filters</h3>
+        <p>Filters arrive in the next build step.</p>
+      </div>
+
+      <div className="desk-side-panel-section">
+        <h3>Connection summary</h3>
+        <StatsPanel nodes={nodes} edges={edges} categories={categories} />
       </div>
     </aside>
   );

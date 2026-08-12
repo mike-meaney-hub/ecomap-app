@@ -129,7 +129,15 @@ export function EcomapEditorPage() {
             />
           )}
         </div>
-        {mode === 'desk' && <DeskModeSidePanel version={version} isReadOnly={isFinalised} />}
+        {mode === 'desk' && (
+          <DeskModeSidePanel
+            version={version}
+            isReadOnly={isFinalised}
+            nodes={nodes ?? []}
+            edges={edges ?? []}
+            categories={categories ?? []}
+          />
+        )}
       </div>
     </div>
   );
