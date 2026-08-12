@@ -1,0 +1,34 @@
+.btn {
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  padding: 8px 14px;
+  font-size: 14px;
+  background: var(--bg);
+  color: var(--text-h);
+  transition: background 0.1s ease;
+}
+
+.btn:hover {
+  background: var(--bg-raised);
+}
+
+.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+
+.btn-primary:hover {
+  filter: brightness(1.08);
+  background: var(--accent);
+}
+
+.btn-danger {
+  color: var(--danger);
+  border-color: var(--danger);
+  background: var(--bg);
+}
+
+.btn-danger:hover {
+  background: var(--danger-bg);
+}

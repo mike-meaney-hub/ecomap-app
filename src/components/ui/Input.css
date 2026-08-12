@@ -1,0 +1,25 @@
+.ui-input {
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  padding: 8px 10px;
+  background: var(--bg);
+  color: var(--text-h);
+  font-size: 14px;
+  width: 100%;
+}
+
+.ui-input:focus {
+  outline: 2px solid var(--accent-border);
+  outline-offset: -1px;
+}
+
+.ui-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 13px;
+}
+
+.ui-field-label {
+  color: var(--text);
+}

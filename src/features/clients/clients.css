@@ -1,0 +1,88 @@
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.client-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 420px;
+  padding: 16px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  margin-bottom: 20px;
+  background: var(--bg-raised);
+}
+
+.client-form-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.client-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.client-list-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px 16px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  text-decoration: none;
+  color: var(--text-h);
+}
+
+.client-list-item:hover {
+  background: var(--bg-raised);
+}
+
+.client-list-name {
+  font-weight: 600;
+}
+
+.client-list-ref {
+  color: var(--text);
+  font-size: 14px;
+}
+
+.client-detail-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.client-detail-fields {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 4px 16px;
+  margin: 0 0 24px;
+}
+
+.client-detail-fields dt {
+  color: var(--text);
+  font-size: 13px;
+}
+
+.client-detail-fields dd {
+  margin: 0;
+  color: var(--text-h);
+}
+
+.ecomap-versions-section {
+  border-top: 1px solid var(--border);
+  padding-top: 16px;
+}
+
+.muted {
+  color: var(--text);
+  font-size: 14px;
+}
