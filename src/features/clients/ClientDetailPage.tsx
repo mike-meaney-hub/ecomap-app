@@ -1,7 +1,9 @@
 import { useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useClient } from '../../hooks/useClients';
 import { archiveClient, updateClient } from '../../db/repositories/clients';
+import { useVersionsForClient } from '../../hooks/useEcomapVersions';
+import { createVersion } from '../../db/repositories/ecomapVersions';
 import { ClientForm } from './ClientForm';
 import { Button } from '../../components/ui/Button';
 import './clients.css';
@@ -9,6 +11,7 @@ import './clients.css';
 export function ClientDetailPage() {
   const { clientId } = useParams();
   const client = useClient(clientId);
+  const versions = useVersionsForClient(clientId);
   const navigate = useNavigate();
   const [editing, setEditing] = useState(false);
 
@@ -58,8 +61,30 @@ export function ClientDetailPage() {
       )}
 
       <section className="ecomap-versions-section">
-        <h2>Ecomap versions</h2>
-        <p className="muted">Versioning arrives in the next build step.</p>
+        <div className="page-header">
+          <h2>Ecomap versions</h2>
+          <Button
+            variant="primary"
+            onClick={async () => {
+              const label = `Assessment — ${new Date().toLocaleDateString('en-GB')}`;
+              const version = await createVersion(client.id, label);
+              navigate(`/clients/${client.id}/ecomaps/${version.id}`);
+            }}
+          >
+            + New version
+          </Button>
+        </div>
+        {versions?.length === 0 && <p className="muted">No ecomap versions yet.</p>}
+        <ul className="version-list">
+          {versions?.map((version) => (
+            <li key={version.id}>
+              <Link to={`/clients/${client.id}/ecomaps/${version.id}`} className="version-list-item">
+                <span>{version.versionLabel}</span>
+                <span className={`version-status version-status-${version.status}`}>{version.status}</span>
+              </Link>
+            </li>
+          ))}
+        </ul>
       </section>
     </div>
   );
