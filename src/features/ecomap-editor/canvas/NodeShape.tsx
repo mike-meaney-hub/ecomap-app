@@ -1,4 +1,5 @@
 import type { PointerEvent as ReactPointerEvent } from 'react';
+import { HIGHLIGHT_COLOUR_VAR, type HighlightKind } from './highlight';
 
 const NODE_RADIUS = 28;
 const CENTRAL_RADIUS = 34;
@@ -13,6 +14,9 @@ export function NodeShape({
   isCentral,
   isDraggable,
   isSelected,
+  isDimmed,
+  highlight,
+  showNotesIndicator,
   onPointerDown,
   onClick,
 }: {
@@ -24,6 +28,9 @@ export function NodeShape({
   isCentral: boolean;
   isDraggable: boolean;
   isSelected?: boolean;
+  isDimmed?: boolean;
+  highlight?: HighlightKind;
+  showNotesIndicator?: boolean;
   onPointerDown?: (e: ReactPointerEvent<SVGGElement>) => void;
   onClick?: () => void;
 }) {
@@ -35,14 +42,20 @@ export function NodeShape({
       transform={`translate(${x}, ${y})`}
       onPointerDown={isDraggable ? onPointerDown : undefined}
       onClick={onClick}
-      style={{ cursor: isDraggable ? 'grab' : onClick ? 'pointer' : 'default' }}
+      style={{ cursor: isDraggable ? 'grab' : onClick ? 'pointer' : 'default', opacity: isDimmed ? 0.25 : 1 }}
     >
+      {highlight && (
+        <circle r={radius + 6} fill="none" stroke={HIGHLIGHT_COLOUR_VAR[highlight]} strokeWidth={3} />
+      )}
       <circle
         r={radius}
         fill={fill}
         stroke={isSelected ? 'var(--accent)' : 'var(--border)'}
         strokeWidth={isSelected ? 3 : 1.5}
       />
+      {showNotesIndicator && (
+        <circle cx={radius * 0.7} cy={-radius * 0.7} r={4} fill="var(--accent)" stroke="var(--bg)" strokeWidth={1} />
+      )}
       <text
         y={radius + 16}
         textAnchor="middle"

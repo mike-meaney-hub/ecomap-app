@@ -111,6 +111,7 @@ export function EcomapEditorPage() {
             isReadOnly={isFinalised}
             selected={selected}
             onSelect={setSelected}
+            filter={mode === 'desk' ? filter : undefined}
           />
           {selectedNode && (
             <NodeInlineEditor

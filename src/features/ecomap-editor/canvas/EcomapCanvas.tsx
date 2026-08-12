@@ -5,6 +5,8 @@ import { createEdge } from '../../../db/repositories/edges';
 import { useRelationshipColourMap } from '../../../hooks/useRelationshipColours';
 import { NodeShape } from './NodeShape';
 import { EdgeLine, trimLineToNodeEdges, arrowMarkerId } from './EdgeLine';
+import type { HighlightKind } from './highlight';
+import { nodeMatchesFilter, edgeMatchesFilter, type EcomapFilterState } from '../filters/filterLogic';
 import type { Point } from '../layout/radialLayout';
 import './canvas.css';
 
@@ -23,6 +25,8 @@ export function EcomapCanvas({
   isReadOnly,
   selected,
   onSelect,
+  filter,
+  highlight,
 }: {
   nodes: EcomapNode[];
   edges: EcomapEdge[];
@@ -31,6 +35,8 @@ export function EcomapCanvas({
   isReadOnly: boolean;
   selected?: Selection | null;
   onSelect?: (selection: Selection) => void;
+  filter?: EcomapFilterState;
+  highlight?: Map<string, HighlightKind>;
 }) {
   const svgRef = useRef<SVGSVGElement>(null);
   const relationshipColours = useRelationshipColourMap();
@@ -165,6 +171,8 @@ export function EcomapCanvas({
             colour={relationshipColours[edge.relationshipType]}
             label={edge.label}
             isSelected={selected?.type === 'edge' && selected.id === edge.id}
+            isDimmed={filter ? !edgeMatchesFilter(edge, nodeById, filter) : false}
+            highlight={highlight?.get(edge.id)}
             onClick={() => onSelect?.({ type: 'edge', id: edge.id })}
           />
         );
@@ -199,6 +207,9 @@ export function EcomapCanvas({
             isCentral={node.isCentral}
             isDraggable={!node.isCentral && !isReadOnly}
             isSelected={selected?.type === 'node' && selected.id === node.id}
+            isDimmed={filter ? !nodeMatchesFilter(node, filter) : false}
+            highlight={highlight?.get(node.id)}
+            showNotesIndicator={Boolean(filter?.showNotesIndicators) && node.notes.trim().length > 0}
             onPointerDown={(e) => handleNodePointerDown(node, e)}
             onClick={() => onSelect?.({ type: 'node', id: node.id })}
           />

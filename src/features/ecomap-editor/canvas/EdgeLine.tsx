@@ -1,5 +1,6 @@
 import type { RelationshipType, EdgeDirection } from '../../../db/types';
 import type { Point } from '../layout/radialLayout';
+import { HIGHLIGHT_COLOUR_VAR, type HighlightKind } from './highlight';
 
 const RELATIONSHIP_STYLE: Record<RelationshipType, { width: number; dash?: string }> = {
   strong: { width: 4 },
@@ -38,6 +39,8 @@ export function EdgeLine({
   colour,
   label,
   isSelected,
+  isDimmed,
+  highlight,
   onClick,
 }: {
   from: Point;
@@ -47,6 +50,8 @@ export function EdgeLine({
   colour: string;
   label?: string;
   isSelected?: boolean;
+  isDimmed?: boolean;
+  highlight?: HighlightKind;
   onClick?: () => void;
 }) {
   const style = RELATIONSHIP_STYLE[relationshipType];
@@ -63,7 +68,19 @@ export function EdgeLine({
   const stroke = isSelected ? 'var(--accent)' : colour;
 
   return (
-    <g onClick={onClick} style={{ cursor: onClick ? 'pointer' : 'default' }}>
+    <g onClick={onClick} style={{ cursor: onClick ? 'pointer' : 'default', opacity: isDimmed ? 0.25 : 1 }}>
+      {highlight && (
+        <line
+          x1={from.x}
+          y1={from.y}
+          x2={to.x}
+          y2={to.y}
+          stroke={HIGHLIGHT_COLOUR_VAR[highlight]}
+          strokeWidth={style.width + 6}
+          strokeOpacity={0.5}
+          strokeLinecap="round"
+        />
+      )}
       <line
         x1={from.x}
         y1={from.y}
