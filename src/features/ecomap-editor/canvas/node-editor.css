@@ -79,6 +79,9 @@
 }
 
 .edge-type-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
   text-align: left;
   border: 1px solid var(--border);
   background: var(--bg);
@@ -86,6 +89,13 @@
   border-radius: 6px;
   padding: 6px 10px;
   font-size: 13px;
+}
+
+.edge-type-swatch {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
 }
 
 .edge-type-btn-selected {

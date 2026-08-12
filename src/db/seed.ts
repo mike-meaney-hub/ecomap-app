@@ -1,4 +1,12 @@
 import { db } from './schema';
+import type { RelationshipType } from './types';
+
+const DEFAULT_RELATIONSHIP_COLOURS: { relationshipType: RelationshipType; colour: string }[] = [
+  { relationshipType: 'strong', colour: '#16a34a' },
+  { relationshipType: 'weak', colour: '#9ca3af' },
+  { relationshipType: 'stressful', colour: '#dc2626' },
+  { relationshipType: 'absent', colour: '#d1d5db' },
+];
 
 const DEFAULT_CATEGORIES = [
   'Family',
@@ -52,6 +60,13 @@ export async function seedDefaultsIfEmpty() {
         createdAt: now,
         updatedAt: now,
       })),
+    );
+  }
+
+  const relationshipColourCount = await db.relationshipColours.count();
+  if (relationshipColourCount === 0) {
+    await db.relationshipColours.bulkAdd(
+      DEFAULT_RELATIONSHIP_COLOURS.map((rc) => ({ ...rc, updatedAt: now })),
     );
   }
 }

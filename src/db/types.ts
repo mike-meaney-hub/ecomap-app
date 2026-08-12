@@ -78,3 +78,13 @@ export interface ColourFlag {
   createdAt: string;
   updatedAt: string;
 }
+
+/**
+ * One row per RelationshipType (fixed set of 4, not user-addable/retireable —
+ * the type itself is structural). relationshipType is the primary key.
+ */
+export interface RelationshipColour {
+  relationshipType: RelationshipType;
+  colour: string;
+  updatedAt: string;
+}

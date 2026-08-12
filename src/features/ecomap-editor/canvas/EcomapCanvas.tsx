@@ -1,7 +1,8 @@
-import { useRef, useState, type PointerEvent as ReactPointerEvent } from 'react';
-import type { EcomapNode, EcomapEdge, Category, ColourFlag } from '../../../db/types';
+import { Fragment, useRef, useState, type PointerEvent as ReactPointerEvent } from 'react';
+import type { EcomapNode, EcomapEdge, Category, ColourFlag, RelationshipType } from '../../../db/types';
 import { updateNodePosition } from '../../../db/repositories/nodes';
 import { createEdge } from '../../../db/repositories/edges';
+import { useRelationshipColourMap } from '../../../hooks/useRelationshipColours';
 import { NodeShape } from './NodeShape';
 import { EdgeLine, trimLineToNodeEdges } from './EdgeLine';
 import type { Point } from '../layout/radialLayout';
@@ -12,6 +13,7 @@ export type Selection = { type: 'node' | 'edge'; id: string };
 const NODE_RADIUS = 28;
 const CENTRAL_RADIUS = 34;
 const EDGE_TARGET_SNAP_RADIUS = 40;
+const RELATIONSHIP_TYPES: RelationshipType[] = ['strong', 'weak', 'stressful', 'absent'];
 
 export function EcomapCanvas({
   nodes,
@@ -31,6 +33,7 @@ export function EcomapCanvas({
   onSelect?: (selection: Selection) => void;
 }) {
   const svgRef = useRef<SVGSVGElement>(null);
+  const relationshipColours = useRelationshipColourMap();
   const [dragNodeId, setDragNodeId] = useState<string | null>(null);
   const [dragOffset, setDragOffset] = useState<Point>({ x: 0, y: 0 });
   const [dragPosition, setDragPosition] = useState<Point>({ x: 0, y: 0 });
@@ -126,13 +129,18 @@ export function EcomapCanvas({
     >
       <defs>
         {/* Same right-pointing triangle for both ends — auto-start-reverse flips it
-            180° automatically when used as marker-start, so it must not be pre-mirrored. */}
-        <marker id="arrow-end" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
-          <path d="M0,0 L10,5 L0,10 z" fill="var(--text)" />
-        </marker>
-        <marker id="arrow-start" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-          <path d="M0,0 L10,5 L0,10 z" fill="var(--text)" />
-        </marker>
+            180° automatically when used as marker-start, so it must not be pre-mirrored.
+            One pair per relationship type so the arrowhead matches that type's colour. */}
+        {RELATIONSHIP_TYPES.map((type) => (
+          <Fragment key={type}>
+            <marker id={`arrow-end-${type}`} viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+              <path d="M0,0 L10,5 L0,10 z" fill={relationshipColours[type]} />
+            </marker>
+            <marker id={`arrow-start-${type}`} viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+              <path d="M0,0 L10,5 L0,10 z" fill={relationshipColours[type]} />
+            </marker>
+          </Fragment>
+        ))}
       </defs>
 
       {edges.map((edge) => {
@@ -152,6 +160,7 @@ export function EcomapCanvas({
             to={to}
             relationshipType={edge.relationshipType}
             direction={edge.direction}
+            colour={relationshipColours[edge.relationshipType]}
             label={edge.label}
             isSelected={selected?.type === 'edge' && selected.id === edge.id}
             onClick={() => onSelect?.({ type: 'edge', id: edge.id })}

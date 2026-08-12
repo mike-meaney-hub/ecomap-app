@@ -1,5 +1,6 @@
 import type { EcomapEdge, RelationshipType, EdgeDirection } from '../../../db/types';
 import { updateEdge, archiveEdge } from '../../../db/repositories/edges';
+import { useRelationshipColourMap } from '../../../hooks/useRelationshipColours';
 import { Button } from '../../../components/ui/Button';
 import { Field, Input } from '../../../components/ui/Input';
 
@@ -26,6 +27,8 @@ export function EdgeInlineSelector({
   isReadOnly: boolean;
   onClose: () => void;
 }) {
+  const relationshipColours = useRelationshipColourMap();
+
   return (
     <div className="node-inline-editor">
       <div className="node-inline-editor-header">
@@ -43,6 +46,7 @@ export function EdgeInlineSelector({
               disabled={isReadOnly}
               onClick={() => updateEdge(edge.id, { relationshipType: type })}
             >
+              <span className="edge-type-swatch" style={{ background: relationshipColours[type] }} />
               {RELATIONSHIP_LABELS[type]}
             </button>
           ))}

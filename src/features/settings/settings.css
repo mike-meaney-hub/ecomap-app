@@ -1,8 +1,14 @@
 .settings-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(3, 1fr);
   gap: 32px;
   margin-top: 20px;
+}
+
+@media (max-width: 1000px) {
+  .settings-grid {
+    grid-template-columns: 1fr 1fr;
+  }
 }
 
 @media (max-width: 720px) {
@@ -14,6 +20,17 @@
 .lookup-editor h2 {
   font-size: 16px;
   margin-bottom: 12px;
+}
+
+.lookup-editor-hint {
+  font-size: 12px;
+  color: var(--text);
+  margin: -6px 0 12px;
+}
+
+.relationship-colour-label {
+  font-size: 14px;
+  color: var(--text-h);
 }
 
 .lookup-list {

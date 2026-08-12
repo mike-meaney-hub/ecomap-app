@@ -6,9 +6,17 @@ import { useNodesForVersion } from '../../hooks/useNodesForVersion';
 import { useEdgesForVersion } from '../../hooks/useEdgesForVersion';
 import { useCategories } from '../../hooks/useCategories';
 import { useFlags } from '../../hooks/useFlags';
+import { useRelationshipColourMap } from '../../hooks/useRelationshipColours';
 import { EcomapCanvas } from '../ecomap-editor/canvas/EcomapCanvas';
 import { Button } from '../../components/ui/Button';
 import './print.css';
+
+const RELATIONSHIP_LEGEND: { type: 'strong' | 'weak' | 'stressful' | 'absent'; label: string }[] = [
+  { type: 'strong', label: 'Solid, thick — strong / positive' },
+  { type: 'weak', label: 'Solid, thin — tenuous / weak' },
+  { type: 'stressful', label: 'Dashed — stressful / conflictual' },
+  { type: 'absent', label: 'Dotted — absent / non-existent but relevant' },
+];
 
 export function PrintExportPage() {
   const { clientId, versionId } = useParams();
@@ -18,6 +26,7 @@ export function PrintExportPage() {
   const edges = useEdgesForVersion(versionId);
   const categories = useCategories();
   const flags = useFlags();
+  const relationshipColours = useRelationshipColourMap();
   const [showNotes, setShowNotes] = useState(true);
 
   if (!client || !version) {
@@ -81,10 +90,12 @@ export function PrintExportPage() {
         <div className="print-legend-group">
           <h2>Relationship lines</h2>
           <ul>
-            <li>Solid, thick — strong / positive</li>
-            <li>Solid, thin — tenuous / weak</li>
-            <li>Dashed — stressful / conflictual</li>
-            <li>Dotted — absent / non-existent but relevant</li>
+            {RELATIONSHIP_LEGEND.map(({ type, label }) => (
+              <li key={type}>
+                <span className="print-legend-swatch" style={{ background: relationshipColours[type] }} />
+                {label}
+              </li>
+            ))}
           </ul>
         </div>
       </div>

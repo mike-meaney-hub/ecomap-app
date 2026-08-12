@@ -25,6 +25,7 @@ export function EdgeLine({
   to,
   relationshipType,
   direction,
+  colour,
   label,
   isSelected,
   onClick,
@@ -33,16 +34,19 @@ export function EdgeLine({
   to: Point;
   relationshipType: RelationshipType;
   direction: EdgeDirection;
+  colour: string;
   label?: string;
   isSelected?: boolean;
   onClick?: () => void;
 }) {
   const style = RELATIONSHIP_STYLE[relationshipType];
-  const markerStart = direction === 'oneWayBToA' || direction === 'bidirectional' ? 'url(#arrow-start)' : undefined;
-  const markerEnd = direction === 'oneWayAToB' || direction === 'bidirectional' ? 'url(#arrow-end)' : undefined;
+  const markerStart =
+    direction === 'oneWayBToA' || direction === 'bidirectional' ? `url(#arrow-start-${relationshipType})` : undefined;
+  const markerEnd =
+    direction === 'oneWayAToB' || direction === 'bidirectional' ? `url(#arrow-end-${relationshipType})` : undefined;
   const midX = (from.x + to.x) / 2;
   const midY = (from.y + to.y) / 2;
-  const stroke = isSelected ? 'var(--accent)' : 'var(--text)';
+  const stroke = isSelected ? 'var(--accent)' : colour;
 
   return (
     <g onClick={onClick} style={{ cursor: onClick ? 'pointer' : 'default' }}>

@@ -1,5 +1,5 @@
 import Dexie, { type EntityTable } from 'dexie';
-import type { Client, EcomapVersion, EcomapNode, EcomapEdge, Category, ColourFlag } from './types';
+import type { Client, EcomapVersion, EcomapNode, EcomapEdge, Category, ColourFlag, RelationshipColour } from './types';
 
 export class EcomapDB extends Dexie {
   clients!: EntityTable<Client, 'id'>;
@@ -8,6 +8,7 @@ export class EcomapDB extends Dexie {
   edges!: EntityTable<EcomapEdge, 'id'>;
   categories!: EntityTable<Category, 'id'>;
   flags!: EntityTable<ColourFlag, 'id'>;
+  relationshipColours!: EntityTable<RelationshipColour, 'relationshipType'>;
 
   constructor() {
     super('EcomapDB');
@@ -18,6 +19,9 @@ export class EcomapDB extends Dexie {
       edges: 'id, ecomapVersionId, status, [ecomapVersionId+status], fromNodeId, toNodeId',
       categories: 'id, status, sortOrder',
       flags: 'id, status, sortOrder',
+    });
+    this.version(2).stores({
+      relationshipColours: 'relationshipType',
     });
   }
 }
