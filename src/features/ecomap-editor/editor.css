@@ -34,3 +34,16 @@
   font-size: 12px;
   color: var(--text);
 }
+
+.version-summary-notes {
+  margin: 12px 24px 0;
+  width: calc(100% - 48px);
+  resize: vertical;
+  font-family: inherit;
+}
+
+.version-summary-readonly {
+  margin: 12px 24px 0;
+  font-size: 14px;
+  color: var(--text);
+}

@@ -5,7 +5,8 @@ import { useNodesForVersion } from '../../hooks/useNodesForVersion';
 import { useEdgesForVersion } from '../../hooks/useEdgesForVersion';
 import { useCategories } from '../../hooks/useCategories';
 import { useFlags } from '../../hooks/useFlags';
-import { finaliseVersion } from '../../db/repositories/ecomapVersions';
+import { finaliseVersion, updateVersionSummary } from '../../db/repositories/ecomapVersions';
+import { useAutosave } from '../../autosave/useAutosave';
 import { Button } from '../../components/ui/Button';
 import { EcomapCanvas, type Selection } from './canvas/EcomapCanvas';
 import { NodeInlineEditor } from './canvas/NodeInlineEditor';
@@ -13,6 +14,23 @@ import { EdgeInlineSelector } from './canvas/EdgeInlineSelector';
 import { QuickAddBar } from './toolbar/QuickAddBar';
 import './canvas/node-editor.css';
 import './editor.css';
+
+function VersionSummaryNotes({ versionId, summaryNotes }: { versionId: string; summaryNotes: string }) {
+  const [notes, setNotes] = useState(summaryNotes);
+  const autosave = useAutosave(notes, (value) => updateVersionSummary(versionId, value), 800);
+
+  return (
+    <textarea
+      key={versionId}
+      className="ui-input version-summary-notes"
+      placeholder="Practitioner summary for this version…"
+      rows={2}
+      value={notes}
+      onChange={(e) => setNotes(e.target.value)}
+      onBlur={autosave.flush}
+    />
+  );
+}
 
 export function EcomapEditorPage() {
   const { versionId } = useParams();
@@ -41,6 +59,12 @@ export function EcomapEditorPage() {
           </Button>
         )}
       </div>
+
+      {isFinalised ? (
+        version.summaryNotes && <p className="version-summary-readonly">{version.summaryNotes}</p>
+      ) : (
+        <VersionSummaryNotes versionId={version.id} summaryNotes={version.summaryNotes} />
+      )}
 
       {isFinalised && (
         <div className="finalised-banner">
@@ -72,6 +96,7 @@ export function EcomapEditorPage() {
         />
         {selectedNode && (
           <NodeInlineEditor
+            key={selectedNode.id}
             node={selectedNode}
             categories={categories ?? []}
             flags={flags ?? []}
@@ -81,6 +106,7 @@ export function EcomapEditorPage() {
         )}
         {selectedEdge && (
           <EdgeInlineSelector
+            key={selectedEdge.id}
             edge={selectedEdge}
             isReadOnly={isFinalised}
             onClose={() => setSelected(null)}

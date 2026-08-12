@@ -1,5 +1,7 @@
+import { useState } from 'react';
 import type { EcomapNode, Category, ColourFlag } from '../../../db/types';
 import { updateNode, archiveNode } from '../../../db/repositories/nodes';
+import { useAutosave } from '../../../autosave/useAutosave';
 import { SwatchPicker } from './SwatchPicker';
 import { Button } from '../../../components/ui/Button';
 import { Field, Input } from '../../../components/ui/Input';
@@ -17,6 +19,14 @@ export function NodeInlineEditor({
   isReadOnly: boolean;
   onClose: () => void;
 }) {
+  const [label, setLabel] = useState(node.label);
+  const [notes, setNotes] = useState(node.notes);
+
+  const labelAutosave = useAutosave(label, (value) => {
+    if (value.trim()) updateNode(node.id, { label: value.trim() });
+  }, 500);
+  const notesAutosave = useAutosave(notes, (value) => updateNode(node.id, { notes: value }), 800);
+
   return (
     <div className="node-inline-editor">
       <div className="node-inline-editor-header">
@@ -26,13 +36,10 @@ export function NodeInlineEditor({
 
       <Field label="Label">
         <Input
-          defaultValue={node.label}
+          value={label}
           disabled={isReadOnly}
-          onBlur={(e) => {
-            if (e.target.value.trim() && e.target.value !== node.label) {
-              updateNode(node.id, { label: e.target.value.trim() });
-            }
-          }}
+          onChange={(e) => setLabel(e.target.value)}
+          onBlur={labelAutosave.flush}
         />
       </Field>
 
@@ -66,11 +73,10 @@ export function NodeInlineEditor({
         <textarea
           className="ui-input node-inline-editor-notes"
           rows={3}
-          defaultValue={node.notes}
+          value={notes}
           disabled={isReadOnly}
-          onBlur={(e) => {
-            if (e.target.value !== node.notes) updateNode(node.id, { notes: e.target.value });
-          }}
+          onChange={(e) => setNotes(e.target.value)}
+          onBlur={notesAutosave.flush}
         />
       </Field>
 
