@@ -15,6 +15,7 @@ import { EdgeInlineSelector } from './canvas/EdgeInlineSelector';
 import { QuickAddBar } from './toolbar/QuickAddBar';
 import { EditorToolbar } from './toolbar/EditorToolbar';
 import { DeskModeSidePanel } from './panels/DeskModeSidePanel';
+import { EMPTY_FILTER, type EcomapFilterState } from './filters/filterLogic';
 import './canvas/node-editor.css';
 import './editor.css';
 
@@ -30,6 +31,7 @@ export function EcomapEditorPage() {
   const flags = useFlags();
   const [selected, setSelected] = useState<Selection | null>(null);
   const [mode, setMode] = useState<EditorMode>('live');
+  const [filter, setFilter] = useState<EcomapFilterState>(EMPTY_FILTER);
 
   if (!version) {
     return <div className="page">Loading…</div>;
@@ -136,6 +138,9 @@ export function EcomapEditorPage() {
             nodes={nodes ?? []}
             edges={edges ?? []}
             categories={categories ?? []}
+            flags={flags ?? []}
+            filter={filter}
+            onFilterChange={setFilter}
           />
         )}
       </div>
