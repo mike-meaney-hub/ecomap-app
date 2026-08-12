@@ -30,7 +30,7 @@ export interface EcomapNode {
   id: string;
   ecomapVersionId: string;
   label: string;
-  categoryId: string;
+  categoryId: string | null;
   flagId: string | null;
   x: number;
   y: number;

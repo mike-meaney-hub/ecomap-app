@@ -37,3 +37,15 @@ export async function finaliseVersion(id: string) {
 export async function archiveVersion(id: string) {
   await db.ecomapVersions.update(id, { status: 'archived', updatedAt: new Date().toISOString() });
 }
+
+/**
+ * Finalised versions are fully read-only: no node/edge create, edit, or archive.
+ * Every write path in nodes.ts/edges.ts calls this first.
+ */
+export async function assertVersionEditable(versionId: string) {
+  const version = await db.ecomapVersions.get(versionId);
+  if (!version) throw new Error('Ecomap version not found.');
+  if (version.status === 'finalised') {
+    throw new Error('This ecomap version is finalised and read-only.');
+  }
+}

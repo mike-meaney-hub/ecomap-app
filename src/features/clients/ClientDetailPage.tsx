@@ -4,6 +4,7 @@ import { useClient } from '../../hooks/useClients';
 import { archiveClient, updateClient } from '../../db/repositories/clients';
 import { useVersionsForClient } from '../../hooks/useEcomapVersions';
 import { createVersion } from '../../db/repositories/ecomapVersions';
+import { createCentralNode } from '../../db/repositories/nodes';
 import { ClientForm } from './ClientForm';
 import { Button } from '../../components/ui/Button';
 import './clients.css';
@@ -68,6 +69,7 @@ export function ClientDetailPage() {
             onClick={async () => {
               const label = `Assessment — ${new Date().toLocaleDateString('en-GB')}`;
               const version = await createVersion(client.id, label);
+              await createCentralNode(version.id, client.displayName);
               navigate(`/clients/${client.id}/ecomaps/${version.id}`);
             }}
           >
