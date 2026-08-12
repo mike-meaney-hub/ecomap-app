@@ -4,6 +4,7 @@ import { ClientDetailPage } from './features/clients/ClientDetailPage';
 import { SettingsPage } from './features/settings/SettingsPage';
 import { EcomapEditorPage } from './features/ecomap-editor/EcomapEditorPage';
 import { PrintExportPage } from './features/print/PrintExportPage';
+import { ComparisonPage } from './features/comparison/ComparisonPage';
 import './App.css';
 
 function AppLayout() {
@@ -34,6 +35,7 @@ export default function App() {
           <Route path="/" element={<ClientListPage />} />
           <Route path="/settings" element={<SettingsPage />} />
           <Route path="/clients/:clientId" element={<ClientDetailPage />} />
+          <Route path="/clients/:clientId/ecomaps/compare" element={<ComparisonPage />} />
           <Route path="/clients/:clientId/ecomaps/:versionId" element={<EcomapEditorPage />} />
         </Route>
       </Routes>

@@ -64,17 +64,24 @@ export function ClientDetailPage() {
       <section className="ecomap-versions-section">
         <div className="page-header">
           <h2>Ecomap versions</h2>
-          <Button
-            variant="primary"
-            onClick={async () => {
-              const label = `Assessment — ${new Date().toLocaleDateString('en-GB')}`;
-              const version = await createVersion(client.id, label);
-              await createCentralNode(version.id, client.displayName);
-              navigate(`/clients/${client.id}/ecomaps/${version.id}`);
-            }}
-          >
-            + New version
-          </Button>
+          <div className="client-detail-actions">
+            {(versions?.length ?? 0) >= 2 && (
+              <Link to={`/clients/${client.id}/ecomaps/compare`}>
+                <Button>Compare versions</Button>
+              </Link>
+            )}
+            <Button
+              variant="primary"
+              onClick={async () => {
+                const label = `Assessment — ${new Date().toLocaleDateString('en-GB')}`;
+                const version = await createVersion(client.id, label);
+                await createCentralNode(version.id, client.displayName);
+                navigate(`/clients/${client.id}/ecomaps/${version.id}`);
+              }}
+            >
+              + New version
+            </Button>
+          </div>
         </div>
         {versions?.length === 0 && <p className="muted">No ecomap versions yet.</p>}
         <ul className="version-list">
