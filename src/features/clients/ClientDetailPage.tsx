@@ -84,12 +84,16 @@ export function ClientDetailPage() {
           </div>
         </div>
         {versions?.length === 0 && <p className="muted">No ecomap versions yet.</p>}
-        <ul className="version-list">
+        <ul className="version-timeline">
           {versions?.map((version) => (
-            <li key={version.id}>
-              <Link to={`/clients/${client.id}/ecomaps/${version.id}`} className="version-list-item">
-                <span>{version.versionLabel}</span>
-                <span className={`version-status version-status-${version.status}`}>{version.status}</span>
+            <li key={version.id} className="version-timeline-entry">
+              <div className="version-timeline-date">{version.dateOfAssessment}</div>
+              <Link to={`/clients/${client.id}/ecomaps/${version.id}`} className="version-timeline-content">
+                <div className="version-timeline-header">
+                  <span className="version-timeline-label">{version.versionLabel}</span>
+                  <span className={`version-status version-status-${version.status}`}>{version.status}</span>
+                </div>
+                {version.summaryNotes && <p className="version-timeline-notes">{version.summaryNotes}</p>}
               </Link>
             </li>
           ))}
