@@ -24,7 +24,17 @@ jobs:
           node-version: 20
           cache: npm
       - run: npm ci
+      - run: npm run test
+      - name: Check required Supabase secrets are set
+        run: |
+          if [ -z "${{ secrets.SUPABASE_URL }}" ] || [ -z "${{ secrets.SUPABASE_ANON_KEY }}" ]; then
+            echo "::error::SUPABASE_URL and/or SUPABASE_ANON_KEY repository secrets are not set. Refusing to build a site that would fail at runtime."
+            exit 1
+          fi
       - run: npm run build
+        env:
+          VITE_SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          VITE_SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist

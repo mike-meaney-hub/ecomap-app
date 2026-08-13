@@ -1,6 +1,11 @@
-import { useLiveQuery } from 'dexie-react-hooks';
+import { useRealtimeQuery } from '../lib/useRealtimeQuery';
 import { listActiveNodesForVersion } from '../db/repositories/nodes';
 
 export function useNodesForVersion(versionId: string | undefined) {
-  return useLiveQuery(() => (versionId ? listActiveNodesForVersion(versionId) : []), [versionId], []);
+  return useRealtimeQuery(
+    () => (versionId ? listActiveNodesForVersion(versionId) : Promise.resolve([])),
+    [versionId],
+    [],
+    versionId ? { table: 'nodes', filter: `ecomap_version_id=eq.${versionId}` } : null,
+  );
 }

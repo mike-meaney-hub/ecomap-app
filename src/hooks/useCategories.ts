@@ -1,6 +1,6 @@
-import { useLiveQuery } from 'dexie-react-hooks';
+import { useRealtimeQuery } from '../lib/useRealtimeQuery';
 import { listActiveCategories } from '../db/repositories/categories';
 
 export function useCategories() {
-  return useLiveQuery(listActiveCategories, [], []);
+  return useRealtimeQuery(listActiveCategories, [], [], { table: 'categories' });
 }

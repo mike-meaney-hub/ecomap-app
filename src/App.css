@@ -27,6 +27,22 @@
   color: var(--accent);
 }
 
+.app-header-logout {
+  margin-left: auto;
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 6px 12px;
+  color: var(--text);
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.app-header-logout:hover {
+  color: var(--text-h);
+  border-color: var(--accent-border);
+}
+
 .app-main {
   flex: 1;
   display: flex;
