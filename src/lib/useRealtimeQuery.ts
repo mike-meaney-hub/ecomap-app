@@ -29,6 +29,13 @@ export function useRealtimeQuery<T>(
   const [value, setValue] = useState<T>(defaultValue);
   const queryFnRef = useRef(queryFn);
   queryFnRef.current = queryFn;
+  // Supabase's channel() reuses an existing channel object when called again
+  // with the same topic name, and calling .on() on a channel that's already
+  // been .subscribe()'d throws. Two mounted hook instances querying the same
+  // table (e.g. the canvas and an inline edge editor both reading
+  // relationship_colours at once) would otherwise collide on an identical
+  // topic — so each hook instance gets its own unique topic suffix.
+  const instanceIdRef = useRef(crypto.randomUUID());
 
   useEffect(() => {
     let cancelled = false;
@@ -48,7 +55,7 @@ export function useRealtimeQuery<T>(
     }
 
     const channel = supabase
-      .channel(`realtime:${subscribe.table}:${subscribe.filter ?? 'all'}`)
+      .channel(`realtime:${subscribe.table}:${subscribe.filter ?? 'all'}:${instanceIdRef.current}`)
       .on(
         'postgres_changes',
         { event: '*', schema: 'public', table: subscribe.table, filter: subscribe.filter },
