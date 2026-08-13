@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useActiveClients } from '../../hooks/useClients';
 import { createClient } from '../../db/repositories/clients';
+import { hasTutorialBeenSeen } from '../../lib/tutorialPreference';
+import { TutorialModal } from '../tutorial/TutorialModal';
 import { ClientForm } from './ClientForm';
 import { Button } from '../../components/ui/Button';
 import './clients.css';
@@ -9,6 +11,7 @@ import './clients.css';
 export function ClientListPage() {
   const clients = useActiveClients();
   const [showForm, setShowForm] = useState(false);
+  const [showTutorial, setShowTutorial] = useState(false);
 
   return (
     <div className="page">
@@ -26,6 +29,7 @@ export function ClientListPage() {
           onSubmit={async (values) => {
             await createClient(values);
             setShowForm(false);
+            if (!hasTutorialBeenSeen()) setShowTutorial(true);
           }}
         />
       )}
@@ -42,6 +46,8 @@ export function ClientListPage() {
           </li>
         ))}
       </ul>
+
+      {showTutorial && <TutorialModal onClose={() => setShowTutorial(false)} />}
     </div>
   );
 }
