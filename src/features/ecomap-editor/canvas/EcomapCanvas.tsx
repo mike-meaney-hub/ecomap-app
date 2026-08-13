@@ -1,4 +1,4 @@
-import { Fragment, useRef, useState, type PointerEvent as ReactPointerEvent } from 'react';
+import { Fragment, useRef, useState, type KeyboardEvent as ReactKeyboardEvent, type PointerEvent as ReactPointerEvent } from 'react';
 import type { EcomapNode, EcomapEdge, Category, ColourFlag, RelationshipType } from '../../../db/types';
 import { updateNodePosition } from '../../../db/repositories/nodes';
 import { createEdge } from '../../../db/repositories/edges';
@@ -25,6 +25,7 @@ export function EcomapCanvas({
   isReadOnly,
   selected,
   onSelect,
+  onClearSelection,
   filter,
   highlight,
 }: {
@@ -35,6 +36,7 @@ export function EcomapCanvas({
   isReadOnly: boolean;
   selected?: Selection | null;
   onSelect?: (selection: Selection) => void;
+  onClearSelection?: () => void;
   filter?: EcomapFilterState;
   highlight?: Map<string, HighlightKind>;
 }) {
@@ -67,6 +69,17 @@ export function EcomapCanvas({
 
   function radiusOf(node: EcomapNode) {
     return node.isCentral ? CENTRAL_RADIUS : NODE_RADIUS;
+  }
+
+  function handleNudge(node: EcomapNode, dx: number, dy: number) {
+    if (isReadOnly || node.isCentral) return;
+    updateNodePosition(node.id, node.x + dx, node.y + dy);
+  }
+
+  function handleSvgKeyDown(e: ReactKeyboardEvent<SVGSVGElement>) {
+    if (e.key === 'Escape') {
+      onClearSelection?.();
+    }
   }
 
   function handleNodePointerDown(node: EcomapNode, e: ReactPointerEvent<SVGGElement>) {
@@ -132,6 +145,7 @@ export function EcomapCanvas({
       viewBox="-400 -300 800 600"
       onPointerMove={handlePointerMove}
       onPointerUp={handlePointerUp}
+      onKeyDown={handleSvgKeyDown}
     >
       <defs>
         {/* Same right-pointing triangle for both ends — auto-start-reverse flips it
@@ -212,6 +226,7 @@ export function EcomapCanvas({
             showNotesIndicator={Boolean(filter?.showNotesIndicators) && node.notes.trim().length > 0}
             onPointerDown={(e) => handleNodePointerDown(node, e)}
             onClick={() => onSelect?.({ type: 'node', id: node.id })}
+            onNudge={!node.isCentral && !isReadOnly ? (dx, dy) => handleNudge(node, dx, dy) : undefined}
           />
         );
       })}

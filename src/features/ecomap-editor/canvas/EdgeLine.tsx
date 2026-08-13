@@ -1,3 +1,4 @@
+import type { KeyboardEvent as ReactKeyboardEvent } from 'react';
 import type { RelationshipType, EdgeDirection } from '../../../db/types';
 import type { Point } from '../layout/radialLayout';
 import { HIGHLIGHT_COLOUR_VAR, type HighlightKind } from './highlight';
@@ -67,8 +68,23 @@ export function EdgeLine({
   const midY = (from.y + to.y) / 2;
   const stroke = isSelected ? 'var(--accent)' : colour;
 
+  function handleKeyDown(e: ReactKeyboardEvent<SVGGElement>) {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      onClick?.();
+    }
+  }
+
   return (
-    <g onClick={onClick} style={{ cursor: onClick ? 'pointer' : 'default', opacity: isDimmed ? 0.25 : 1 }}>
+    <g
+      className="focusable-shape"
+      tabIndex={0}
+      role="button"
+      aria-label={`Relationship, ${relationshipType}${label ? `, ${label}` : ''}`}
+      onClick={onClick}
+      onKeyDown={handleKeyDown}
+      style={{ cursor: onClick ? 'pointer' : 'default', opacity: isDimmed ? 0.25 : 1 }}
+    >
       {highlight && (
         <line
           x1={from.x}
