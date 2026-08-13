@@ -106,6 +106,8 @@ export function PrintExportPage() {
           <p>{version.summaryNotes}</p>
         </div>
       )}
+
+      <footer className="print-footer">Printed on {new Date().toLocaleDateString('en-GB')}</footer>
     </div>
   );
 }

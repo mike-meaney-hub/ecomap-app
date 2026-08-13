@@ -52,6 +52,10 @@
   margin-bottom: 20px;
 }
 
+.print-legend-group {
+  break-inside: avoid;
+}
+
 .print-legend-group h2 {
   font-size: 13px;
   margin-bottom: 6px;
@@ -84,6 +88,7 @@
 .print-notes {
   border-top: 1px solid var(--border);
   padding-top: 16px;
+  break-inside: avoid;
 }
 
 .print-notes h2 {
@@ -94,6 +99,18 @@
 .print-notes p {
   white-space: pre-wrap;
   font-size: 14px;
+}
+
+.print-footer {
+  margin-top: 24px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+  font-size: 11px;
+  color: var(--text);
+}
+
+@page {
+  margin: 1.5cm;
 }
 
 @media print {
